@@ -1,18 +1,21 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class ClienteTest {
-
     Pedido pedido;
+
+    public ClienteTest() {
+    }
 
     @Test
     void deveNotificarUmCliente() {
         Pedido Pedido = new Pedido("001");
         Cliente Cliente = new Cliente("Cliente 1");
-        Cliente.solicitarPedido(Pedido);
+        Cliente.acompanharPedido(Pedido);
         Pedido.solicitar();
-        assertEquals("Cliente 1, pedido 001 solicitado.", Cliente.getUltimaNotificacao());
+        Pedido.iniciarPreparacao();
+        Pedido.iniciarEntrega();
+        Assertions.assertEquals("Cliente 1, pedido 001 saiu para entrega.", Cliente.getUltimaNotificacao());
     }
 
     @Test
@@ -20,11 +23,13 @@ public class ClienteTest {
         Pedido Pedido = new Pedido("002");
         Cliente Cliente1 = new Cliente("Cliente 1");
         Cliente Cliente2 = new Cliente("Cliente 2");
-        Cliente1.solicitarPedido(Pedido);
-        Cliente2.solicitarPedido(Pedido);
+        Cliente1.acompanharPedido(Pedido);
+        Cliente2.acompanharPedido(Pedido);
         Pedido.solicitar();
-        assertEquals("Cliente 1, pedido 002 solicitado.", Cliente1.getUltimaNotificacao());
-        assertEquals("Cliente 2, pedido 002 solicitado.", Cliente2.getUltimaNotificacao());
+        Pedido.iniciarPreparacao();
+        Pedido.iniciarEntrega();
+        Assertions.assertEquals("Cliente 1, pedido 002 saiu para entrega.", Cliente1.getUltimaNotificacao());
+        Assertions.assertEquals("Cliente 2, pedido 002 saiu para entrega.", Cliente2.getUltimaNotificacao());
     }
 
     @Test
@@ -32,7 +37,9 @@ public class ClienteTest {
         Pedido Pedido = new Pedido("003");
         Cliente Cliente = new Cliente("Cliente 1");
         Pedido.solicitar();
-        assertEquals(null, Cliente.getUltimaNotificacao());
+        Pedido.iniciarPreparacao();
+        Pedido.iniciarEntrega();
+        Assertions.assertEquals((Object) null, Cliente.getUltimaNotificacao());
     }
 
     @Test
@@ -41,12 +48,12 @@ public class ClienteTest {
         Pedido PedidoB = new Pedido("005");
         Cliente Cliente1 = new Cliente("Cliente 1");
         Cliente Cliente2 = new Cliente("Cliente 2");
-        Cliente1.solicitarPedido(PedidoA);
-        Cliente2.solicitarPedido(PedidoB);
+        Cliente1.acompanharPedido(PedidoA);
+        Cliente2.acompanharPedido(PedidoB);
         PedidoA.solicitar();
-        assertEquals("Cliente 1, pedido 004 solicitado.", Cliente1.getUltimaNotificacao());
-        assertEquals(null, Cliente2.getUltimaNotificacao());
+        PedidoA.iniciarPreparacao();
+        PedidoA.iniciarEntrega();
+        Assertions.assertEquals("Cliente 1, pedido 004 saiu para entrega.", Cliente1.getUltimaNotificacao());
+        Assertions.assertEquals((Object) null, Cliente2.getUltimaNotificacao());
     }
-
-
 }

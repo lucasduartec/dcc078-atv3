@@ -1,7 +1,6 @@
 import java.util.Observable;
 
 public class Pedido extends Observable {
-
     private String codigo;
     private PedidoEstado estado;
 
@@ -15,7 +14,7 @@ public class Pedido extends Observable {
     }
 
     public PedidoEstado getEstado() {
-        return estado;
+        return this.estado;
     }
 
     public String getCodigo() {
@@ -23,25 +22,24 @@ public class Pedido extends Observable {
     }
 
     public boolean solicitar() {
-        setChanged();
-        notifyObservers();
-        return estado.solicitar(this);
+        return this.estado.solicitar(this);
     }
 
     public boolean iniciarPreparacao() {
-        return estado.iniciarPreparacao(this);
+        return this.estado.iniciarPreparacao(this);
     }
 
     public boolean iniciarEntrega() {
-        return estado.iniciarEntrega(this);
+        this.setChanged();
+        this.notifyObservers();
+        return this.estado.iniciarEntrega(this);
     }
 
     public boolean entregar() {
-        return estado.entregar(this);
+        return this.estado.entregar(this);
     }
 
     public boolean cancelar() {
-        return estado.cancelar(this);
+        return this.estado.cancelar(this);
     }
-
 }
